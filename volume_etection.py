@@ -155,6 +155,7 @@ class KeyTapController:
             with self.key_tapped_lock:
                 if not self.key_tapped:
                     self.keyboard.press(self.key)
+                    time.sleep(0.05)
                     self.keyboard.release(self.key)
                     self.key_tapped = True
 
