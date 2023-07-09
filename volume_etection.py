@@ -160,56 +160,6 @@ class KeyTapController:
 
     def terminate(self):
         self.listener.stop()
-    def __init__(self, settings_file='settings.json', default_threshold=300, default_key='c'):
-        self.settings_file = settings_file
-        self.key_tapped_lock = threading.Lock()
-        self.key_tapped = False
-        self.keyboard = Controller()
-        self.settings_mode = False
-
-        try:
-            with open(self.settings_file, 'r') as file:
-                settings = json.load(file)
-                self.threshold = settings['threshold']
-                self.key = settings['key']
-        except (FileNotFoundError, ValueError, KeyError):
-            self.threshold = default_threshold
-            self.key = default_key
-
-        def on_press(key):
-            if key == Key.f1:
-                self.settings_mode = not self.settings_mode
-            elif not self.settings_mode and key.char == self.key:
-                self.key_tapped = False
-
-        self.listener = Listener(on_press=on_press)
-        self.listener.start()
-
-    def update_settings(self):
-        try:
-            threshold = int(app.threshold_entry.get())
-            key = app.key_entry.get()
-            if len(key) != 1:
-                raise ValueError
-            self.threshold = threshold
-            self.key = key
-            with open(self.settings_file, 'w') as file:
-                json.dump({'threshold': self.threshold, 'key': self.key}, file)
-            self.key_tapped = False
-            app.lock_status_label["text"] = "入力状態：受付中"
-        except ValueError:
-            pass
-
-    def process_audio(self, volume):
-        if not self.settings_mode and volume > self.threshold:
-            with self.key_tapped_lock:
-                if not self.key_tapped:
-                    self.keyboard.press(self.key)
-                    self.keyboard.release(self.key)
-                    self.key_tapped = True
-
-    def terminate(self):
-        self.listener.stop()
 
 if __name__ == "__main__":
     app = Application()
