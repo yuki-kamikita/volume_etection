@@ -40,6 +40,7 @@ class Application(tk.Tk):
         self.controller.terminate()
         self.audio_handler.terminate()
         self.destroy()
+        os._exit(0) # 強制的に全てのプロセスを終了させる FIXME: ちゃんと全部のスレッドを見て、適切な終了処理をすべきではあるが、大した事するアプリではないので現状これでいいか
 
     def create_widgets(self):
         self.threshold_label = ttk.Label(self, text="音量閾値：")

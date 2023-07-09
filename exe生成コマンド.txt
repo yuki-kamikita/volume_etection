@@ -1,1 +1,1 @@
-pyinstaller --onefile --windowed --icon=odoroki.ico volume_etection.py
+pyinstaller --onefile --noconsole --icon=odoroki.ico volume_etection.py
